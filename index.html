@@ -429,54 +429,122 @@ function initializeTheme(){applyTheme(localStorage.getItem("viana_theme")||"ligh
 
 initializeTheme();initializeToday();renderHolidays();calculate();loadSavedAttendance();
 
-/* Public counters: CounterAPI V1 is used for a simple no-login public counter.
-   For a production site, replace with a secured backend if stronger anti-abuse
-   protection is required. */
-const COUNTER_BASE="https://api.counterapi.dev/v1/viana-attendance-calculator";
-const COUNTERS={visits:"visitors",r1:"rating-1",r2:"rating-2",r3:"rating-3",r4:"rating-4",r5:"rating-5"};
-/* Optional public feedback endpoint.
-   Example: a Formspree/Web3Forms/other HTTPS form endpoint.
-   Leave blank until you create one. No personal information is embedded here. */
-const FEEDBACK_ENDPOINT="";
+/* Supabase public stats + feedback */
+const SUPABASE_URL="https://nobpfnmgguiqmwewlbpd.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_m_Kp48WeQQXDDnogVKhOWA_G_8wN_DR";
 
-async function counterGet(name){
- try{const r=await fetch(`${COUNTER_BASE}/${name}`); if(!r.ok) throw new Error(); const j=await r.json(); return Number(j.count ?? j.value ?? 0)||0}catch(e){return 0}
+const SUPABASE_REST=`${SUPABASE_URL}/rest/v1`;
+const STAT_KEYS={visits:"visitors",r1:"rating-1",r2:"rating-2",r3:"rating-3",r4:"rating-4",r5:"rating-5"};
+
+function supabaseHeaders(extra={}){
+  return {
+    apikey:SUPABASE_PUBLISHABLE_KEY,
+    Authorization:`Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+    ...extra
+  };
 }
-async function counterUp(name){
- try{const r=await fetch(`${COUNTER_BASE}/${name}/up`); if(!r.ok) throw new Error(); const j=await r.json(); return Number(j.count ?? j.value ?? 0)||0}catch(e){return 0}
+function supabaseReady(){
+  return SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR_");
 }
+
+async function statGet(name){
+  if(!supabaseReady()) return 0;
+  try{
+    const r=await fetch(`${SUPABASE_REST}/site_stats?key=eq.${encodeURIComponent(name)}&select=count`,{
+      headers:supabaseHeaders()
+    });
+    if(!r.ok) throw new Error();
+    const rows=await r.json();
+    return Number(rows[0]?.count||0);
+  }catch(e){return 0}
+}
+async function statUp(name){
+  if(!supabaseReady()) return 0;
+  try{
+    const r=await fetch(`${SUPABASE_REST}/rpc/increment_stat`,{
+      method:"POST",
+      headers:supabaseHeaders({"Content-Type":"application/json","Prefer":"return=representation"}),
+      body:JSON.stringify({p_key:name})
+    });
+    if(!r.ok) throw new Error();
+    const j=await r.json();
+    return Number(Array.isArray(j)?j[0]?.count:j?.count)||0;
+  }catch(e){return 0}
+}
+
 async function loadPublicStats(){
- let visitors=0;
- try{
-   const key="viana_attendance_visit_day";
-   const today=new Date().toISOString().slice(0,10);
-   if(localStorage.getItem(key)!==today){visitors=await counterUp(COUNTERS.visits);localStorage.setItem(key,today)}
-   else visitors=await counterGet(COUNTERS.visits);
- }catch(e){visitors=await counterGet(COUNTERS.visits)}
- document.getElementById("visitorCount").textContent=visitors.toLocaleString();document.getElementById("communityVisitorCount").textContent=visitors.toLocaleString();
- const counts=await Promise.all([1,2,3,4,5].map(n=>counterGet(COUNTERS["r"+n])));
- const total=counts.reduce((a,b)=>a+b,0),sum=counts.reduce((a,b,i)=>a+b*(i+1),0);
- document.getElementById("ratingCount").textContent=`(${total.toLocaleString()})`;
- document.getElementById("topRating").textContent=total?(sum/total).toFixed(1):"—";
- document.getElementById("communityRatingCount").textContent=total.toLocaleString();
- document.getElementById("communityRating").textContent=total?(sum/total).toFixed(1):"—";
+  let visitors=0;
+  try{
+    const key="viana_attendance_visit_day";
+    const today=new Date().toISOString().slice(0,10);
+    if(localStorage.getItem(key)!==today){
+      visitors=await statUp(STAT_KEYS.visits);
+      localStorage.setItem(key,today);
+    }else{
+      visitors=await statGet(STAT_KEYS.visits);
+    }
+  }catch(e){visitors=await statGet(STAT_KEYS.visits)}
+
+  document.getElementById("visitorCount").textContent=visitors.toLocaleString();
+  document.getElementById("communityVisitorCount").textContent=visitors.toLocaleString();
+
+  const counts=await Promise.all([1,2,3,4,5].map(n=>statGet(STAT_KEYS["r"+n])));
+  const total=counts.reduce((a,b)=>a+b,0);
+  const sum=counts.reduce((a,b,i)=>a+b*(i+1),0);
+
+  document.getElementById("ratingCount").textContent=`(${total.toLocaleString()})`;
+  document.getElementById("topRating").textContent=total?(sum/total).toFixed(1):"—";
+  document.getElementById("communityRatingCount").textContent=total.toLocaleString();
+  document.getElementById("communityRating").textContent=total?(sum/total).toFixed(1):"—";
 }
+
 let selectedRating=0;
 function openModal(id){document.getElementById(id).classList.add("open")}
 function closeModal(id){document.getElementById(id).classList.remove("open")}
 function chooseRating(n){
- selectedRating=n;
- document.querySelectorAll(".rating-btn").forEach(b=>b.classList.toggle("selected",Number(b.dataset.rating)<=n));
+  selectedRating=n;
+  document.querySelectorAll(".rating-btn").forEach(b=>b.classList.toggle("selected",Number(b.dataset.rating)<=n));
 }
 async function submitRating(){
- const status=document.getElementById("ratingStatus");
- if(!selectedRating){status.textContent="Please select a rating.";return}
- const key="viana_attendance_rated";
- if(localStorage.getItem(key)){status.textContent="You have already rated this calculator on this browser.";return}
- const newCount=await counterUp(COUNTERS["r"+selectedRating]);
- localStorage.setItem(key,"1");
- status.textContent="Thank you for your rating!";
- await loadPublicStats();
+  const status=document.getElementById("ratingStatus");
+  if(!selectedRating){status.textContent="Please select a rating.";return}
+  if(!supabaseReady()){status.textContent="The rating service is not connected yet. Please add the Supabase publishable key.";return}
+  const key="viana_attendance_rated";
+  if(localStorage.getItem(key)){status.textContent="You have already rated this calculator on this browser.";return}
+  await statUp(STAT_KEYS["r"+selectedRating]);
+  localStorage.setItem(key,"1");
+  status.textContent="Thank you for your rating!";
+  await loadPublicStats();
+}
+
+async function submitFeedback(){
+  const text=document.getElementById("feedbackText").value.trim();
+  const subject=document.getElementById("feedbackSubject").value.trim();
+  const status=document.getElementById("feedbackStatus");
+  if(text.length<5){status.textContent="Please enter a little more detail.";return}
+  if(!supabaseReady()){
+    status.textContent="The feedback service is not connected yet. Please add the Supabase publishable key.";
+    return;
+  }
+  status.textContent="Sending...";
+  try{
+    const r=await fetch(`${SUPABASE_REST}/feedback`,{
+      method:"POST",
+      headers:supabaseHeaders({"Content-Type":"application/json","Prefer":"return=minimal"}),
+      body:JSON.stringify({
+        subject:subject||"Attendance Calculator Feedback",
+        message:text
+      })
+    });
+    if(!r.ok) throw new Error();
+    status.textContent="Thank you! Your feedback was submitted.";
+    document.getElementById("feedbackText").value="";
+    document.getElementById("feedbackSubject").value="";
+  }catch(e){
+    status.textContent="Could not send feedback right now. Please try again later.";
+  }
+}
+loadPublicStats();
 }
 async function submitFeedback(){
  const text=document.getElementById("feedbackText").value.trim(), subject=document.getElementById("feedbackSubject").value.trim();
