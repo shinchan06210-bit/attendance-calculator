@@ -101,15 +101,25 @@ button{cursor:pointer}
   font-weight:900;
   letter-spacing:-.02em;
 }
-.brand-mini::before{
-  content:"A";
-  width:34px;height:34px;
-  display:grid;place-items:center;
-  border-radius:11px;
-  color:#fff;
-  background:linear-gradient(135deg,var(--primary),var(--primary-2));
-  box-shadow:0 8px 18px rgba(37,99,235,.25);
+
+.brand-logo{
+  width:38px;
+  height:38px;
+  display:block;
+  flex:0 0 38px;
+  object-fit:contain;
+  border-radius:10px;
 }
+.brand-mini{
+  min-width:0;
+}
+.brand-mini-text{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
 .top-stats{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .stat-chip,.theme-btn{
   border:1px solid var(--line);
@@ -397,19 +407,116 @@ tr:hover td{background:color-mix(in srgb,var(--primary-soft) 35%,var(--surface))
   .actions button{width:100%}
   .modal{padding:17px;border-radius:18px}
 }
+
+/* Refined header/logo/theme controls */
+.theme-btn{
+  min-height:38px;
+  min-width:92px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--surface-2);
+  color:var(--text);
+  font-weight:800;
+  line-height:1;
+  box-shadow:0 4px 12px rgba(15,23,42,.06);
+}
+.theme-btn:hover{transform:translateY(-1px);border-color:var(--primary);color:var(--primary)}
+.theme-btn .theme-icon{font-size:17px;line-height:1}
+.theme-btn .moon{display:none}
+html[data-theme="dark"] .theme-btn .sun{display:none}
+html[data-theme="dark"] .theme-btn .moon{display:inline}
+html[data-theme="dark"] .theme-btn{background:#172033;color:#f8fafc;border-color:#334155}
+@media(max-width:720px){
+  .site-header{position:sticky}
+  .header-inner{
+    min-height:auto;
+    padding:9px 12px;
+    gap:9px;
+    align-items:center;
+  }
+  .brand-mini{flex:1;min-width:0;gap:8px}
+  .brand-logo{width:34px;height:34px;flex-basis:34px;border-radius:9px}
+  .brand-mini-text{font-size:12px}
+  .top-stats{
+    flex:0 0 auto;
+    width:auto;
+    max-width:100%;
+    gap:5px;
+    overflow:visible;
+  }
+  .top-stats .stat-chip{
+    min-height:34px;
+    padding:7px 8px;
+    font-size:10px;
+    border-radius:10px;
+  }
+  .top-stats .theme-btn{
+    min-width:38px;
+    width:38px;
+    height:36px;
+    padding:7px;
+    border-radius:10px;
+  }
+  .theme-btn .theme-label{display:none}
+  .theme-btn .theme-icon{font-size:18px}
+}
+@media(max-width:430px){
+  .header-inner{padding:8px 10px}
+  .brand-mini-text{font-size:11px}
+  .brand-logo{width:32px;height:32px;flex-basis:32px}
+  .top-stats .stat-chip{
+    font-size:0;
+    min-width:34px;
+    width:34px;
+    justify-content:center;
+    padding:7px;
+  }
+  .top-stats .stat-chip .star,
+  .top-stats .stat-chip span:first-child{font-size:15px}
+  .top-stats .theme-btn{width:36px;min-width:36px}
+}
+
+
+.form-status.success{
+  color:var(--success);
+  font-weight:800;
+}
+.form-status.error{
+  color:var(--danger);
+  font-weight:700;
+}
+.feedback-form .primary:disabled{
+  opacity:.7;
+  cursor:wait;
+  transform:none;
+}
+
 </style>
 <!-- Public counters use CounterAPI; feedback is local until a public form endpoint is configured. -->
 </head>
 <body>
 <header class="site-header">
 <div class="header-inner">
-  <div class="brand-mini">New Attendance Calculator - Under Testing Give your feedback</div>
+  <div class="brand-mini">
+    <img class="brand-logo" src="logo.png" alt="Attendance Calculator logo"
+       onerror="this.style.display='none'">
+    <span class="brand-mini-text">New Attendance Calculator</span>
+  </div>
   <div class="top-stats">
     <span class="stat-chip"><span class="star">★</span><span id="topRating">—</span> <span id="ratingCount">(0)</span></span>
     <span class="stat-chip">👥 <span id="visitorCount">0</span> visitors</span>
     <button class="stat-chip" onclick="openModal('ratingModal')">Rate</button>
     <button class="stat-chip" onclick="openModal('feedbackModal')">Feedback</button>
-    <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Change theme"><span class="sun">☀ Light</span><span class="moon">☾ Dark</span></button>
+    <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Change theme" aria-label="Change theme">
+      <span class="theme-icon sun" aria-hidden="true">☀</span>
+      <span class="theme-icon moon" aria-hidden="true">☾</span>
+      <span class="theme-label"><span class="sun">Light</span><span class="moon">Dark</span></span>
+    </button>
   </div>
 </div>
 </header>
@@ -594,7 +701,7 @@ Include the entered “Calculate up to / Today” date in the attendance period
 <div class="modal">
 <div class="modal-head"><h2>Privacy & Disclaimer</h2><button class="close" onclick="closeModal('privacyModal')">✕</button></div>
 <p class="note">This is an unofficial educational calculator. It does not require a login and does not ask for student name, ID, phone number, email, password, or college credentials.</p>
-<p class="note">The site uses a public counter service for aggregate visitor and rating counts. A small browser setting is used to avoid counting the same browser repeatedly on the same day and to remember whether that browser has submitted a rating.</p>
+<p class="note">The site uses Supabase for aggregate visitor/rating counts and feedback. A small browser setting is used to avoid counting the same browser repeatedly on the same day and to remember whether that browser has submitted a rating.</p>
 <p class="note"><b>Do not enter confidential information</b> into attendance notes or feedback.</p>
 <p class="note">Attendance results are estimates. Always verify your final attendance in the official portal.</p>
 </div></div>
@@ -753,9 +860,22 @@ function initializeToday(){
  const chosen=today<min?min:(today>max?max:today);
  asof.value=chosen;asof.min=min;asof.max=max;
 }
-function applyTheme(t){document.documentElement.setAttribute("data-theme",t);localStorage.setItem("viana_theme",t)}
-function toggleTheme(){applyTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark")}
-function initializeTheme(){applyTheme(localStorage.getItem("viana_theme")||"light")}
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  localStorage.setItem("viana_theme",t);
+  const btn=document.getElementById("themeToggle");
+  if(btn){
+    const dark=t==="dark";
+    btn.setAttribute("aria-label",dark?"Switch to light theme":"Switch to dark theme");
+    btn.title=dark?"Switch to light theme":"Switch to dark theme";
+  }
+}
+function toggleTheme(){
+  applyTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark");
+}
+function initializeTheme(){
+  applyTheme(localStorage.getItem("viana_theme")||"light");
+}
 
 initializeTheme();initializeToday();renderHolidays();calculate();
 document.querySelectorAll(".total,.present,#target,#includeToday,#nameA,#nameB,#nameC,#nameD").forEach(el=>{
@@ -958,6 +1078,7 @@ async function submitFeedback(){
   const textEl=document.getElementById("feedbackText");
   const subjectEl=document.getElementById("feedbackSubject");
   const status=document.getElementById("feedbackStatus");
+  const sendBtn=document.querySelector("#feedbackModal .primary");
 
   const message=textEl ? textEl.value.trim() : "";
   const subject=subjectEl ? subjectEl.value.trim() : "";
@@ -978,32 +1099,54 @@ async function submitFeedback(){
   }
 
   if(status) status.textContent="Sending...";
+  if(sendBtn){
+    sendBtn.disabled=true;
+    sendBtn.textContent="Sending...";
+  }
 
   try{
     const response=await fetch(`${SUPABASE_REST}/feedback`,{
       method:"POST",
+      mode:"cors",
       headers:supabaseHeaders({
         "Content-Type":"application/json",
         "Prefer":"return=minimal"
       }),
       body:JSON.stringify({
-        subject:subject || "Attendance Calculator Feedback",
+        subject:(subject || "Attendance Calculator Feedback").slice(0,200),
         message:message
       })
     });
 
-    if(!response.ok){
-      const errorText=await response.text();
-      throw new Error(`Feedback insert failed (${response.status}): ${errorText}`);
+    /*
+      Supabase returns 2xx when the row is accepted.
+      Treat every 2xx response as success and show the
+      success message only after the request completes.
+    */
+    if(response.status < 200 || response.status >= 300){
+      let detail="";
+      try{ detail=await response.text(); }catch(_){}
+      throw new Error(`Feedback insert failed (${response.status}) ${detail}`);
     }
 
     if(textEl) textEl.value="";
     if(subjectEl) subjectEl.value="";
 
-    if(status) status.textContent="Thank you! Your feedback was submitted successfully. 💙";
+    if(status){
+      status.className="form-status success";
+      status.textContent="Thank you! Your feedback was submitted successfully. 💙";
+    }
   }catch(error){
     console.error("Feedback submission error:",error);
-    if(status) status.textContent="Could not submit feedback right now. Please try again.";
+    if(status){
+      status.className="form-status error";
+      status.textContent="We couldn't confirm the submission. If it appears in the feedback dashboard, your feedback was received.";
+    }
+  }finally{
+    if(sendBtn){
+      sendBtn.disabled=false;
+      sendBtn.textContent="Send Feedback";
+    }
   }
 }
 
