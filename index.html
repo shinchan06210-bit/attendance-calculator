@@ -181,12 +181,13 @@ Include the entered “Calculate up to / Today” date in the attendance period
 <div class="slot c"><h3>Slot C</h3><label>Total Attendance Till Now</label><input class="total" data-slot="C" type="number" min="0" value="0"><label style="margin-top:9px">Present Till Now</label><input class="present" data-slot="C" type="number" min="0" value="0"></div>
 <div class="slot d"><h3>Slot D</h3><label>Total Attendance Till Now</label><input class="total" data-slot="D" type="number" min="0" value="0"><label style="margin-top:9px">Present Till Now</label><input class="present" data-slot="D" type="number" min="0" value="0"></div>
 </div>
-<div class="actions"><button class="primary" onclick="saveAttendance()">Save & Update Results</button><button class="secondary" onclick="loadSavedAttendance()">Load Saved Data</button><button class="danger" onclick="resetAttendance()">Reset Data</button></div>
-<div class="update-bar"><span class="note" id="saveNotice"><b>Tip:</b> Update these values whenever your Viana attendance changes.</span><button class="quick" onclick="document.getElementById('attendanceInputCard').scrollIntoView({behavior:'smooth',block:'start'})">↻ Update Attendance</button></div>
+<div class="actions">
+<button class="primary" onclick="calculate()">Calculate Attendance</button>
+</div>
 </div>
 
 
-<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Slot-wise Attendance Result</h2><button class="quick" onclick="document.getElementById('attendanceInputCard').scrollIntoView({behavior:'smooth',block:'start'})">Edit Attendance</button></div><div id="slotResults" class="results"></div>
+<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Slot-wise Attendance Result</h2></div><div id="slotResults" class="results"></div>
 <p class="note">“Attendance count you can still miss” is the number of attendance counts you can lose and still reach the target if the rest of the remaining scheduled attendance is attended.</p></div>
 
 <div id="results">
@@ -409,25 +410,11 @@ function initializeToday(){
  const chosen=today<min?min:(today>max?max:today);
  asof.value=chosen;asof.min=min;asof.max=max;
 }
-function saveAttendance(){
- const data={};document.querySelectorAll(".total,.present").forEach(x=>data[x.className.split(" ")[0]+x.dataset.slot]=x.value);
- localStorage.setItem("viana_attendance_values",JSON.stringify(data));
- calculate();
- const old=document.getElementById("saveNotice");if(old) old.textContent="Attendance saved on this device and results updated.";
-}
-function loadSavedAttendance(){
- try{const d=JSON.parse(localStorage.getItem("viana_attendance_values")||"null");if(!d)return alert("No saved attendance data found on this device.");
- document.querySelectorAll(".total").forEach(x=>{if(d.total+x.dataset.slot!==undefined)x.value=d.total+x.dataset.slot});
- document.querySelectorAll(".present").forEach(x=>{if(d.present+x.dataset.slot!==undefined)x.value=d.present+x.dataset.slot});
- calculate();
- }catch(e){alert("Saved attendance data could not be loaded.")}
-}
-function resetAttendance(){if(!confirm("Reset the entered attendance values on this device?"))return;document.querySelectorAll(".total,.present").forEach(x=>x.value=0);localStorage.removeItem("viana_attendance_values");calculate()}
 function applyTheme(t){document.documentElement.setAttribute("data-theme",t);localStorage.setItem("viana_theme",t)}
 function toggleTheme(){applyTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark")}
 function initializeTheme(){applyTheme(localStorage.getItem("viana_theme")||"light")}
 
-initializeTheme();initializeToday();renderHolidays();calculate();loadSavedAttendance();
+initializeTheme();initializeToday();renderHolidays();calculate();
 
 /* =========================================================
    SUPABASE: Ratings + Visitors + Feedback
@@ -646,10 +633,22 @@ async function submitFeedback(){
   if(status) status.textContent="Sending...";
 
   try{
-    await rpc("submit_feedback",{
-      p_subject:subject || "Attendance Calculator Feedback",
-      p_message:message
+    const response=await fetch(`${SUPABASE_REST}/feedback`,{
+      method:"POST",
+      headers:supabaseHeaders({
+        "Content-Type":"application/json",
+        "Prefer":"return=minimal"
+      }),
+      body:JSON.stringify({
+        subject:subject || "Attendance Calculator Feedback",
+        message:message
+      })
     });
+
+    if(!response.ok){
+      const errorText=await response.text();
+      throw new Error(`Feedback insert failed (${response.status}): ${errorText}`);
+    }
 
     if(textEl) textEl.value="";
     if(subjectEl) subjectEl.value="";
