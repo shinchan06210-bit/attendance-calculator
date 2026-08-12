@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta name="description" content="Free online attendance calculator for students. Plan attendance for multiple slots, holidays, remaining classes, required percentage, and possible absences.">
+<meta name="keywords" content="attendance calculator, college attendance calculator, attendance percentage calculator, slot attendance, student attendance planner, SIMATS Viana attendance calculator">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0f172a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SIMATS ENGINEERING Viana Portal Attendance Calculator">
+<meta property="og:description" content="A free educational attendance planning calculator for slot-based college timetables.">
+<meta property="og:image" content="">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SIMATS ENGINEERING Viana Portal Attendance Calculator">
+<meta name="twitter:description" content="Free educational attendance planning calculator.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"SIMATS ENGINEERING Viana Portal Attendance Calculator","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"Free educational attendance planning calculator for slot-based college timetables.","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
+</script>
+
+<title>SIMATS ENGINEERING Viana Portal Attendance Calculator | Free Attendance Planner</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e4e7ec;--blue:#2563eb;--green:#16a34a;--red:#dc2626;--orange:#ea580c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+.wrap{max-width:1250px;margin:auto;padding:28px 18px 60px}.brand{display:flex;align-items:center;gap:10px}.badge{font-size:11px;font-weight:800;color:#fff;background:#2563eb;padding:4px 8px;border-radius:999px}
+h1{font-size:27px;margin:0}.sub{color:var(--muted);margin:5px 0 22px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 4px 18px rgba(16,24,40,.04)}
+h2{font-size:19px;margin:0 0 14px}.help{background:#eff6ff;border-left:4px solid #3b82f6;padding:13px 15px;border-radius:8px;color:#334155;line-height:1.55;font-size:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+label{display:block;font-size:13px;font-weight:750;color:#475467;margin-bottom:6px}input{width:100%;padding:11px 12px;border:1px solid #d0d5dd;border-radius:9px;font-size:14px;background:#fff}
+input:disabled{background:#f2f4f7;color:#667085}.small{font-size:12px;color:var(--muted);margin-top:5px}
+button{padding:10px 15px;border:0;border-radius:9px;font-weight:750;cursor:pointer}.primary{background:#2563eb;color:#fff}.secondary{background:#eef2ff;color:#3730a3}.danger{background:#fee2e2;color:#991b1b}
+.subjects,.results{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.subject,.slot{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafbfc}
+.subject b{font-size:18px}.subject input{margin-top:7px}.slot{background:#fff}.a{border-top:5px solid #facc15}.b{border-top:5px solid #ef4444}.c{border-top:5px solid #3b82f6}.d{border-top:5px solid #22c55e}
+.slot h3{margin:0 0 12px;font-size:20px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#f8fafc;border-radius:8px;padding:9px}.stat small{display:block;color:var(--muted);font-size:10px}.stat b{font-size:16px}.good{color:var(--green)}.bad{color:var(--red)}.warn{color:#b45309}
+.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.metric{background:#f8fafc;border:1px solid #eef0f3;border-radius:11px;padding:13px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:18px}
+table{width:100%;border-collapse:collapse}th,td{padding:10px 9px;border-bottom:1px solid #eaecf0;text-align:left;font-size:13px}th{background:#f8fafc}
+.tag{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800}.holiday{background:#fff7ed;color:#c2410c}.sunday{background:#f2f4f7;color:#667085}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.hidden{display:none}.note{font-size:13px;color:var(--muted);line-height:1.6}
+@media(max-width:950px){.grid4,.subjects,.results,.summary{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.grid4,.subjects,.results,.summary,.grid3{grid-template-columns:1fr}}
+
+/* Public-site header, metrics, feedback and footer */
+.site-header{position:sticky;top:0;z-index:20;background:rgba(15,23,42,.96);color:#fff;border-bottom:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px)}
+.header-inner{max-width:1250px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand-mini{font-weight:800;font-size:14px;letter-spacing:.1px}.top-stats{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stat-chip{display:inline-flex;align-items:center;gap:5px;color:#e2e8f0;background:#1e293b;border:1px solid #334155;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:750}
+.stat-chip button{background:transparent;color:#f8fafc;padding:0;font-size:12px}.star{color:#fbbf24}
+.site-footer{margin-top:35px;background:#0f172a;color:#cbd5e1}.footer-inner{max-width:1250px;margin:auto;padding:28px 18px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:25px}.footer-title{color:#fff;font-weight:800;margin-bottom:7px}.footer-links{display:flex;flex-wrap:wrap;gap:12px}.footer-links button{background:transparent;color:#cbd5e1;padding:0}.footer-note{font-size:12px;line-height:1.6;color:#94a3b8}
+.modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,.65);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}.modal-backdrop.open{display:flex}.modal{width:min(520px,100%);background:#fff;border-radius:18px;padding:22px;box-shadow:0 25px 70px rgba(0,0,0,.25)}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{margin:0}.close{background:#f1f5f9;color:#334155;padding:7px 10px}.rating-row{display:flex;gap:7px;margin:14px 0}.rating-btn{font-size:25px;background:#f8fafc;color:#cbd5e1;border:1px solid #e2e8f0;padding:6px 10px}.rating-btn.selected,.rating-btn:hover{color:#f59e0b;background:#fffbeb}.feedback-form textarea{width:100%;min-height:120px;padding:11px;border:1px solid #d0d5dd;border-radius:9px;font:inherit;resize:vertical}.feedback-form input{margin-bottom:10px}.form-status{font-size:13px;margin-top:9px;color:#475467}
+.legal{font-size:11px;color:#94a3b8;margin-top:10px}
+@media(max-width:700px){.header-inner{align-items:flex-start;flex-direction:column}.footer-inner{grid-template-columns:1fr}.top-stats{width:100%;overflow-x:auto;flex-wrap:nowrap}.stat-chip{white-space:nowrap}.brand h1{font-size:23px}.card{padding:16px}.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}.table-wrap table{min-width:760px}.results{grid-template-columns:1fr!important}.summary{grid-template-columns:1fr 1fr!important}.stats{grid-template-columns:1fr 1fr}}
+
+label span[aria-hidden="true"]{color:#dc2626;font-weight:900}
+html[data-theme="dark"]{color-scheme:dark}html[data-theme="dark"] body{--bg:#0b1220;--card:#111827;--text:#f1f5f9;--muted:#94a3b8;--line:#263244;background:var(--bg);color:var(--text)}
+html[data-theme="dark"] .card,html[data-theme="dark"] .subject,html[data-theme="dark"] .slot{background:#111827;border-color:#263244;box-shadow:none}html[data-theme="dark"] .help{background:#0f243f;border-left-color:#60a5fa;color:#dbeafe}
+html[data-theme="dark"] input,html[data-theme="dark"] select{background:#0f172a;color:#f8fafc;border-color:#334155}html[data-theme="dark"] .stat,html[data-theme="dark"] .metric{background:#0f172a;border-color:#263244}
+html[data-theme="dark"] th{background:#0f172a;color:#e2e8f0}html[data-theme="dark"] td{border-color:#263244}html[data-theme="dark"] .site-footer{background:#020617}
+html[data-theme="dark"] .modal{background:#111827;color:#f1f5f9}html[data-theme="dark"] .close{background:#1e293b;color:#e2e8f0}html[data-theme="dark"] .rating-btn{background:#0f172a;border-color:#334155}html[data-theme="dark"] .secondary{background:#1e3a8a;color:#dbeafe}
+.theme-btn{background:#1e293b;color:#fff;border:1px solid #334155}.theme-btn .sun{display:inline}.theme-btn .moon{display:none}html[data-theme="dark"] .theme-btn .sun{display:none}html[data-theme="dark"] .theme-btn .moon{display:inline}
+.table-wrap{overflow-x:auto}.community-card{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.community-item{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);display:flex;align-items:center;justify-content:space-between}.community-item b{font-size:20px}.community-item small{display:block;color:var(--muted)}
+.update-bar{display:flex;gap:9px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:12px;padding:11px 13px;background:#f8fafc;border:1px solid #eaecf0;border-radius:10px}.quick{background:#e0ecff;color:#1d4ed8}.reset{background:#fff1f2;color:#be123c}html[data-theme="dark"] .update-bar{background:#0f172a;border-color:#263244}
+@media(max-width:700px){.community-card{grid-template-columns:1fr 1fr}.update-bar{align-items:stretch}.update-bar button{width:100%}}
+</style>
+<!-- Public counters use CounterAPI; feedback is local until a public form endpoint is configured. -->
+</head>
+<body>
+<header class="site-header">
+<div class="header-inner">
+  <div class="brand-mini">Viana Portal Attendance Calculator</div>
+  <div class="top-stats">
+    <span class="stat-chip"><span class="star">★</span><span id="topRating">—</span> <span id="ratingCount">(0)</span></span>
+    <span class="stat-chip">👥 <span id="visitorCount">0</span> visitors</span>
+    <button class="stat-chip" onclick="openModal('ratingModal')">Rate</button>
+    <button class="stat-chip" onclick="openModal('feedbackModal')">Feedback</button>
+    <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Change theme"><span class="sun">☀ Light</span><span class="moon">☾ Dark</span></button>
+  </div>
+</div>
+</header>
+<div class="wrap">
+<div class="brand"><h1>SIMATS ENGINEERING Viana Portal Attendance Calculator <span class="badge">NEW</span></h1></div>
+<div class="sub">MS1 Jul–Sep 2026 • Simple attendance planner</div>
+<div class="card community-card" aria-label="Community statistics">
+<div class="community-item"><div><small>Average Rating</small><b><span class="star">★</span> <span id="communityRating">—</span>/5</b></div><span>⭐</span></div>
+<div class="community-item"><div><small>Ratings</small><b id="communityRatingCount">0</b></div><span>💬</span></div>
+<div class="community-item"><div><small>Visitors</small><b id="communityVisitorCount">0</b></div><span>👥</span></div>
+<div class="community-item"><div><small>Share feedback</small><b style="font-size:14px">Help improve</b></div><button class="quick" onclick="openModal('feedbackModal')">Feedback</button></div>
+</div>
+
+<div class="card">
+<h2>How to use</h2>
+<div class="help">
+<b>1.</b> Keep the regular class dates as per your timetable.<br>
+<b>2.</b> Enter the <b>actual Total Recorded</b> and <b>Present</b> count shown in your attendance portal. If a faculty did not mark attendance, do not add that missing attendance to the recorded total.<br>
+<b>3.</b> Add any extra holidays using <b>Add Holiday</b>. A holiday is removed from attendance calculation, but it <b>does not change the slot rotation</b>.<br>
+<b>4.</b> If attendance is marked during an exam day, enter those counts in <b>Exam Attendance</b> and press <b>Add Counts</b>.<br>
+<b>5.</b> The result shows your current percentage, final percentage if you attend all remaining classes, attendance count you can still miss, and maximum future sessions you can miss.
+</div>
+<p class="note"><b>Important:</b> <ul class="note">
+  <li>Morning = 2 attendance count</li> 
+  <li>Afternoon = 1 attendance count.</li>
+  <li>Sundays have no classes.</li>
+  <li>The timetable rotation continues continuously</li> 
+  </ul> </p>
+</div>
+
+<div class="card">
+<h2>Semester & Attendance Settings</h2>
+<div style="margin-bottom:14px">
+<label>Select Academic Cycle <span aria-hidden="true">*</span></label>
+<select id="academicCycle" style="width:100%;padding:11px 12px;border:1px solid #d0d5dd;border-radius:9px;font-size:14px;background:#fff">
+<option value="ms1-jul-sep-2026">MS1 Jul–Sep 2026</option>
+</select>
+<div class="small">Select the academic cycle used for this calculator.</div>
+</div>
+<div class="grid4">
+<div>
+<label>Classes Start Date <span aria-hidden="true">*</span></label>
+<input id="start" type="date" value="2026-07-06" readonly>
+<div class="small">Locked because MS1 Jul-Sep 2026 starts on 06 Jul 2026</div>
+</div>
+<div>
+<label>Classes End Date <span aria-hidden="true">*</span></label>
+<input id="end" type="date" value="2026-09-03" min="2026-07-06">
+<div class="small">Tentaively: Classes ends on 03 Sep 2026</div>
+</div>
+<div>
+<label>Calculate up to / Today <span aria-hidden="true">*</span></label>
+<input id="asof" type="date" value="2026-08-12" min="2026-08-12" max="2026-09-03">
+<div class="small"><b><i>*Choose the date till the attendance Marked</i></b></div>
+</div>
+<div>
+<label>Required Attendance % <span aria-hidden="true">*</span></label>
+<input id="target" type="number" value="80" min="0" max="100" step="0.1">
+</div>
+</div>
+<div style="margin-top:14px;padding:11px 13px;background:#f8fafc;border:1px solid #eaecf0;border-radius:9px">
+<label style="display:flex;align-items:center;gap:9px;margin:0;color:#344054">
+<input id="includeToday" type="checkbox" style="width:17px;height:17px">
+Include the entered “Calculate up to / Today” date in the attendance period
+</label>
+<div class="small" style="margin-left:26px">
+<ul>
+<li>ON: the entered date is treated as already completed, so remaining classes start from the next date.</li>
+<li>OFF: the entered date is not treated as completed, so it remains in the remaining schedule.</li>
+</ul>
+</div>
+</div>
+<p class="note">Regular classes are scheduled from <b>06 Jul 2026 to 03 Sep 2026 <i>(Tentatively)</i></b>. Sundays are excluded. Added holidays exclude attendance count only and do <b>not</b> shift the timetable rotation.</p>
+</div>
+
+<div class="card">
+<h2>Optional Class / Course Names</h2>
+<p class="note">Leave these blank if you only want to see Slot A/B/C/D. If you enter a name, the result will show for example <b>Slot A – CSA1001</b>.</p>
+<div class="subjects">
+<div class="subject"><b>Slot A</b><input id="nameA" placeholder="Optional name"></div>
+<div class="subject"><b>Slot B</b><input id="nameB" placeholder="Optional name"></div>
+<div class="subject"><b>Slot C</b><input id="nameC" placeholder="Optional name"></div>
+<div class="subject"><b>Slot D</b><input id="nameD" placeholder="Optional name"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Add Holidays Which is Upcoming</h2>
+<p class="note">Use this only when a date is a holiday and its attendance should not be counted. The timetable row remains visible and the rotation is <b>not shifted</b>.</p>
+<div class="grid3">
+<div><label>Holiday Date</label><input id="holidayDate" type="date"></div>
+<div><label>Reason (optional)</label><input id="holidayReason" placeholder="College holiday"></div>
+<div style="align-self:end"><button class="primary" onclick="addHoliday()">Add Holiday</button></div>
+</div>
+<div id="holidayList" class="note" style="margin-top:12px"></div>
+</div>
+
+<div class="card" id="attendanceInputCard">
+<h2>Enter / Update Actual Attendance Till Now</h2>
+<div class="help"> 
+  <ul><li><b><i>Enter below as per Your Attendance in Viana</i></b></li></ul></div><br>
+<div class="results">
+<div class="slot a"><h3>Slot A</h3><label>Total Attendance Till Now</label><input class="total" data-slot="A" type="number" min="0" value="0"><label style="margin-top:9px">Present Till Now</label><input class="present" data-slot="A" type="number" min="0" value="0"></div>
+<div class="slot b"><h3>Slot B</h3><label>Total Attendance Till Now</label><input class="total" data-slot="B" type="number" min="0" value="0"><label style="margin-top:9px">Present Till Now</label><input class="present" data-slot="B" type="number" min="0" value="0"></div>
+<div class="slot c"><h3>Slot C</h3><label>Total Attendance Till Now</label><input class="total" data-slot="C" type="number" min="0" value="0"><label style="margin-top:9px">Present Till Now</label><input class="present" data-slot="C" type="number" min="0" value="0"></div>
+<div class="slot d"><h3>Slot D</h3><label>Total Attendance Till Now</label><input class="total" data-slot="D" type="number" min="0" value="0"><label style="margin-top:9px">Present Till Now</label><input class="present" data-slot="D" type="number" min="0" value="0"></div>
+</div>
+<div class="actions"><button class="primary" onclick="saveAttendance()">Save & Update Results</button><button class="secondary" onclick="loadSavedAttendance()">Load Saved Data</button><button class="danger" onclick="resetAttendance()">Reset Data</button></div>
+<div class="update-bar"><span class="note" id="saveNotice"><b>Tip:</b> Update these values whenever your Viana attendance changes.</span><button class="quick" onclick="document.getElementById('attendanceInputCard').scrollIntoView({behavior:'smooth',block:'start'})">↻ Update Attendance</button></div>
+</div>
+
+
+<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Slot-wise Attendance Result</h2><button class="quick" onclick="document.getElementById('attendanceInputCard').scrollIntoView({behavior:'smooth',block:'start'})">Edit Attendance</button></div><div id="slotResults" class="results"></div>
+<p class="note">“Attendance count you can still miss” is the number of attendance counts you can lose and still reach the target if the rest of the remaining scheduled attendance is attended.</p></div>
+
+<div id="results">
+<div class="card"><h2>Overall Result for All Slots</h2><div class="summary">
+<div class="metric"><small>Remaining timetable days</small><strong id="days">-</strong></div>
+<div class="metric"><small>Remaining attendance count</small><strong id="remain">-</strong></div>
+<div class="metric"><small>Required percentage</small><strong id="targetShow">-</strong></div>
+<div class="metric"><small>Regular class cutoff</small><strong id="cutoff">-</strong></div>
+<div class="metric"><small>Added holidays</small><strong id="holidayCount">-</strong></div>
+</div></div>
+
+<div class="card"><h2>Fixed Timetable — Remaining Dates</h2>
+<p class="note">Rotation is fixed and continuous: <b>A-B → C-D → B-A → D-C → A-B → C-D</b>. Sundays are skipped for scheduling. Added holidays remain in the timetable but their attendance count is excluded.</p>
+<div class="table-wrap"><table><thead><tr><th>Date</th><th>Day</th><th>Morning (08:00 AM – 12:00 PM)</th><th>Afternoon (01:00 PM – 03:00 PM)</th><th>Status</th></tr></thead><tbody id="schedule"></tbody></table></div></div>
+
+<div class="card">
+<h2>Exam Attendance — From 04 Sep 2026</h2>
+<div class="help">There may be about <b>12 examination days</b> (3 days per slot: Model Exam, Capstone/Practical, University Exam). These are not automatically added because exam attendance is rare/uncertain. If your faculty actually records attendance, enter the <b>Extra Attendance Marked Count</b> here and click <b>Add Counts</b>.</div><br>
+<div class="grid4">
+<div><label>Slot A Exam Count</label><input id="examA" type="number" min="0" value="0"></div>
+<div><label>Slot B Exam Count</label><input id="examB" type="number" min="0" value="0"></div>
+<div><label>Slot C Exam Count</label><input id="examC" type="number" min="0" value="0"></div>
+<div><label>Slot D Exam Count</label><input id="examD" type="number" min="0" value="0"></div>
+</div>
+<div class="actions"><button class="primary" onclick="addExamCounts()">Add Counts</button><button class="danger" onclick="clearExamCounts()">Clear Exam Counts</button></div>
+<p id="examStatus" class="note"></p>
+</div>
+</div>
+</div>
+
+
+
+<div id="ratingModal" class="modal-backdrop" onclick="if(event.target===this)closeModal('ratingModal')">
+<div class="modal">
+<div class="modal-head"><h2>Rate this calculator</h2><button class="close" onclick="closeModal('ratingModal')">✕</button></div>
+<p class="note">Your rating helps improve this educational tool. No name, email, phone number or college details are required.</p>
+<div class="rating-row">
+<button class="rating-btn" data-rating="1" onclick="chooseRating(1)">★</button>
+<button class="rating-btn" data-rating="2" onclick="chooseRating(2)">★</button>
+<button class="rating-btn" data-rating="3" onclick="chooseRating(3)">★</button>
+<button class="rating-btn" data-rating="4" onclick="chooseRating(4)">★</button>
+<button class="rating-btn" data-rating="5" onclick="chooseRating(5)">★</button>
+</div>
+<button class="primary" onclick="submitRating()">Submit Rating</button>
+<p id="ratingStatus" class="form-status"></p>
+</div></div>
+
+<div id="feedbackModal" class="modal-backdrop" onclick="if(event.target===this)closeModal('feedbackModal')">
+<div class="modal">
+<div class="modal-head"><h2>Feedback & Suggestions</h2><button class="close" onclick="closeModal('feedbackModal')">✕</button></div>
+<p class="note">Found a calculation issue, timetable correction, design suggestion, or feature request? Tell us. Do not enter personal or confidential information.</p>
+<div class="feedback-form">
+<input id="feedbackSubject" placeholder="Subject (optional)">
+<textarea id="feedbackText" placeholder="Write your feedback or correction here..." maxlength="2000"></textarea>
+<div class="actions"><button class="primary" onclick="submitFeedback()">Send Feedback</button><button class="secondary" onclick="closeModal('feedbackModal')">Cancel</button></div>
+<p id="feedbackStatus" class="form-status"></p>
+</div>
+</div></div>
+
+<div id="privacyModal" class="modal-backdrop" onclick="if(event.target===this)closeModal('privacyModal')">
+<div class="modal">
+<div class="modal-head"><h2>Privacy & Disclaimer</h2><button class="close" onclick="closeModal('privacyModal')">✕</button></div>
+<p class="note">This is an unofficial educational calculator. It does not require a login and does not ask for student name, ID, phone number, email, password, or college credentials.</p>
+<p class="note">The site uses a public counter service for aggregate visitor and rating counts. A small browser setting is used to avoid counting the same browser repeatedly on the same day and to remember whether that browser has submitted a rating.</p>
+<p class="note"><b>Do not enter confidential information</b> into attendance notes or feedback.</p>
+<p class="note">Attendance results are estimates. Always verify your final attendance in the official portal.</p>
+</div></div>
+<footer class="site-footer">
+<div class="footer-inner">
+<div><div class="footer-title">SIMATS ENGINEERING Viana Portal Attendance Calculator</div>
+<div class="footer-note">Free educational attendance-planning tool. This website is unofficial and is not affiliated with, endorsed by, or operated by any college, university, Viana Portal, or other institution.</div>
+<div class="legal">Do not enter personal, login, student ID, password, medical, financial, or other confidential information.</div></div>
+<div><div class="footer-title">Help & Feedback</div><div class="footer-links"><button onclick="openModal('feedbackModal')">Feedback / Corrections</button><button onclick="openModal('ratingModal')">Rate the Calculator</button><button onclick="openModal('privacyModal')">Privacy & Disclaimer</button></div></div>
+<div><div class="footer-title">Information</div><div class="footer-note">Attendance results are estimates based on the schedule and counts entered by the user. Always verify final attendance with your official portal.</div></div>
+</div>
+</footer>
+
+<script>
+const rotation=[["A","B"],["C","D"],["B","A"],["D","C"],["A","B"],["C","D"]];
+const holidays=new Map([["2026-08-15","College Holiday"]]);
+const examCounts={A:0,B:0,C:0,D:0};
+
+function dateOnly(s){return new Date(s+"T00:00:00")}
+function dateKey(d){return d.toISOString().slice(0,10)}
+function addDays(d,n){let x=new Date(d);x.setDate(x.getDate()+n);return x}
+function fmt(d){return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}
+function names(){return {A:document.getElementById("nameA").value.trim(),B:document.getElementById("nameB").value.trim(),C:document.getElementById("nameC").value.trim(),D:document.getElementById("nameD").value.trim()}}
+function slotLabel(s){const n=names()[s];return n?`Slot ${s} – ${n}`:`Slot ${s}`}
+
+function makeSchedule(){
+ const start=dateOnly(document.getElementById("start").value);
+ const end=dateOnly(document.getElementById("end").value);
+ const out=[];let idx=0;
+ for(let d=new Date(start);d<=end;d=addDays(d,1)){
+   const isSunday=d.getDay()===0;
+   if(isSunday){out.push({date:new Date(d),m:null,a:null,mCount:0,aCount:0,holiday:false,isSunday:true});continue;}
+   const p=rotation[idx%6];
+   out.push({date:new Date(d),m:p[0],a:p[1],mCount:2,aCount:1,holiday:holidays.has(dateKey(d)),isSunday:false});
+   idx++;
+ }
+ return out;
+}
+
+function addHoliday(){
+ const ds=document.getElementById("holidayDate").value;if(!ds)return alert("Choose a holiday date.");
+ const start=document.getElementById("start").value;
+ if(ds<start)return alert("Holiday cannot be before 06 Jul 2026.");
+ holidays.set(ds,document.getElementById("holidayReason").value.trim()||"Holiday");
+ renderHolidays(); calculate();
+}
+function removeHoliday(ds){holidays.delete(ds);renderHolidays();calculate()}
+function renderHolidays(){
+ const el=document.getElementById("holidayList");
+ if(!holidays.size){el.textContent="No additional holidays added.";return}
+ el.innerHTML=[...holidays.entries()].sort().map(([d,r])=>`<span style="display:inline-block;margin:4px 7px 4px 0;padding:6px 9px;background:#fff7ed;border-radius:8px;color:#9a3412">${d} — ${r} <button style="padding:3px 6px;margin-left:4px" onclick="removeHoliday('${d}')">×</button></span>`).join("");
+}
+
+function readInputs(){
+ const total={},present={};
+ document.querySelectorAll(".total").forEach(x=>total[x.dataset.slot]=Math.max(0,Number(x.value)||0));
+ document.querySelectorAll(".present").forEach(x=>present[x.dataset.slot]=Math.max(0,Number(x.value)||0));
+ return {total,present}
+}
+
+function calculate(){
+ const asof=dateOnly(document.getElementById("asof").value);
+ const target=(Number(document.getElementById("target").value)||75)/100;
+ const endVal=document.getElementById("end").value;
+ if(!endVal)return;
+ const end=dateOnly(endVal);
+ const start=dateOnly(document.getElementById("start").value);
+ if(end<start){alert("Regular Classes End cannot be before 06 Jul 2026.");return}
+ if(asof<dateOnly("2026-08-10")){alert("Calculate up to / Today cannot be before 10 Aug 2026.");return}
+ if(asof>end){alert("Calculate up to / Today cannot be after Regular Classes End.");return}
+ const all=makeSchedule();
+ // Future dates are after the chosen cutoff. Holiday rows stay visible but count 0.
+ const includeToday=document.getElementById("includeToday").checked;
+ const future=all.filter(x=>(includeToday ? x.date>asof : x.date>=asof));
+ const futureClasses=future.filter(x=>!x.isSunday);
+ const {total,present}=readInputs();
+ const slots=["A","B","C","D"];const cards=[];
+ slots.forEach(s=>{
+   let remainingCount=0; const weights=[];
+   futureClasses.forEach(x=>{
+     if(x.holiday)return;
+     if(x.m===s){remainingCount+=2;weights.push(2)}
+     if(x.a===s){remainingCount+=1;weights.push(1)}
+   });
+   const t=total[s]||0,p=Math.min(present[s]||0,t);
+   const exam=examCounts[s]||0;
+   const finalTotal=t+remainingCount+exam;
+   const allPresent=p+remainingCount+exam;
+   const currentPct=t?p/t*100:0;
+   const finalPct=finalTotal?allPresent/finalTotal*100:0;
+   const sorted=weights.slice().sort((a,b)=>a-b);
+   let missSessions=0,missCount=0;
+   for(const w of sorted){
+     if((allPresent-(missCount+w))/finalTotal+1e-10>=target){missCount+=w;missSessions++}else break;
+   }
+   const maxMiss=Math.max(0,Math.floor(allPresent-target*finalTotal+1e-9));
+   const currentClass=t&&currentPct>=target*100?"good":"bad";
+   cards.push(`<div class="slot ${s.toLowerCase()}"><h3>${slotLabel(s)}</h3><div class="stats">
+   <div class="stat"><small>Total recorded till now</small><b>${t}</b></div>
+   <div class="stat"><small>Present till now</small><b>${p}</b></div>
+   <div class="stat"><small>Current %</small><b class="${currentClass}">${t?currentPct.toFixed(2)+"%":"-"}</b></div>
+   <div class="stat"><small>Remaining scheduled count</small><b>${remainingCount}</b></div>
+   <div class="stat"><small>Exam count added</small><b>${exam}</b></div>
+   <div class="stat"><small>Final total</small><b>${finalTotal}</b></div>
+   <div class="stat"><small>Final % if all Remaining attended</small><b class="${finalPct>=target*100?"good":"bad"}">${finalPct.toFixed(2)}%</b></div>
+   <div class="stat"><small>Attendance count you can still miss</small><b>${maxMiss}</b></div>
+   <div class="stat"><small>Attendance % if you miss that count</small><b class="${((allPresent-maxMiss)/finalTotal*100)>=target*100?"good":"bad"}">${finalTotal?((allPresent-maxMiss)/finalTotal*100).toFixed(2)+"%":"-"}</b></div>
+   </div><p class="${currentClass}"><b>${t?(currentPct>=target*100?"Currently Safe":"Currently Below Target"):"Enter your actual count"}</b></p></div>`);
+ });
+ document.getElementById("slotResults").innerHTML=cards.join("");
+ document.getElementById("days").textContent=futureClasses.length;
+ document.getElementById("remain").textContent=futureClasses.reduce((sum,x)=>sum+(x.holiday?0:3),0);
+ document.getElementById("targetShow").textContent=(target*100).toFixed(1)+"%";
+ document.getElementById("cutoff").textContent=fmt(end);
+ document.getElementById("holidayCount").textContent=holidays.size;
+ const rows=future.map(x=>{
+ const day=x.date.toLocaleDateString("en-US",{weekday:"long"});
+ if(x.isSunday) return `<tr><td>${fmt(x.date)}</td><td>${day}</td><td>—</td><td>—</td><td><span class="tag sunday">Sunday — No classes</span></td></tr>`;
+ return `<tr><td>${fmt(x.date)}</td><td>${day}</td><td>${slotLabel(x.m)} <b>(2)</b></td><td>${slotLabel(x.a)} <b>(1)</b></td><td>${x.holiday?'<span class="tag holiday">Holiday — count excluded</span>':'Scheduled'}</td></tr>`;
+});
+ document.getElementById("schedule").innerHTML=rows.join("")||"<tr><td colspan='5'>No remaining dates.</td></tr>";
+ document.getElementById("results").classList.remove("hidden");
+}
+
+function addExamCounts(){
+ ["A","B","C","D"].forEach(s=>examCounts[s]=Math.max(0,Number(document.getElementById("exam"+s).value)||0));
+ document.getElementById("examStatus").textContent="Exam attendance counts added to the calculation.";
+ calculate();
+}
+function clearExamCounts(){
+ ["A","B","C","D"].forEach(s=>{examCounts[s]=0;document.getElementById("exam"+s).value=0});
+ document.getElementById("examStatus").textContent="Exam attendance counts cleared.";
+ calculate();
+}
+function demo(){
+ const d={A:[50,47],B:[40,36],C:[50,48],D:[40,37]};
+ document.querySelectorAll(".total").forEach(x=>x.value=d[x.dataset.slot][0]);
+ document.querySelectorAll(".present").forEach(x=>x.value=d[x.dataset.slot][1]);
+ calculate();
+}
+
+document.getElementById("end").addEventListener("change", function(){
+ const asof=document.getElementById("asof");
+ asof.max=this.value;
+ if(asof.value && asof.value>this.value) asof.value=this.value;
+ calculate();
+});
+document.getElementById("asof").addEventListener("change", calculate);
+document.getElementById("includeToday").addEventListener("change", calculate);
+
+
+function localISODate(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function initializeToday(){
+ const min="2026-08-10", max=document.getElementById("end").value, today=localISODate();
+ const asof=document.getElementById("asof");
+ const chosen=today<min?min:(today>max?max:today);
+ asof.value=chosen;asof.min=min;asof.max=max;
+}
+function saveAttendance(){
+ const data={};document.querySelectorAll(".total,.present").forEach(x=>data[x.className.split(" ")[0]+x.dataset.slot]=x.value);
+ localStorage.setItem("viana_attendance_values",JSON.stringify(data));
+ calculate();
+ const old=document.getElementById("saveNotice");if(old) old.textContent="Attendance saved on this device and results updated.";
+}
+function loadSavedAttendance(){
+ try{const d=JSON.parse(localStorage.getItem("viana_attendance_values")||"null");if(!d)return alert("No saved attendance data found on this device.");
+ document.querySelectorAll(".total").forEach(x=>{if(d.total+x.dataset.slot!==undefined)x.value=d.total+x.dataset.slot});
+ document.querySelectorAll(".present").forEach(x=>{if(d.present+x.dataset.slot!==undefined)x.value=d.present+x.dataset.slot});
+ calculate();
+ }catch(e){alert("Saved attendance data could not be loaded.")}
+}
+function resetAttendance(){if(!confirm("Reset the entered attendance values on this device?"))return;document.querySelectorAll(".total,.present").forEach(x=>x.value=0);localStorage.removeItem("viana_attendance_values");calculate()}
+function applyTheme(t){document.documentElement.setAttribute("data-theme",t);localStorage.setItem("viana_theme",t)}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark")}
+function initializeTheme(){applyTheme(localStorage.getItem("viana_theme")||"light")}
+
+initializeTheme();initializeToday();renderHolidays();calculate();loadSavedAttendance();
+
+/* Public counters: CounterAPI V1 is used for a simple no-login public counter.
+   For a production site, replace with a secured backend if stronger anti-abuse
+   protection is required. */
+const COUNTER_BASE="https://api.counterapi.dev/v1/viana-attendance-calculator";
+const COUNTERS={visits:"visitors",r1:"rating-1",r2:"rating-2",r3:"rating-3",r4:"rating-4",r5:"rating-5"};
+/* Optional public feedback endpoint.
+   Example: a Formspree/Web3Forms/other HTTPS form endpoint.
+   Leave blank until you create one. No personal information is embedded here. */
+const FEEDBACK_ENDPOINT="";
+
+async function counterGet(name){
+ try{const r=await fetch(`${COUNTER_BASE}/${name}`); if(!r.ok) throw new Error(); const j=await r.json(); return Number(j.count ?? j.value ?? 0)||0}catch(e){return 0}
+}
+async function counterUp(name){
+ try{const r=await fetch(`${COUNTER_BASE}/${name}/up`); if(!r.ok) throw new Error(); const j=await r.json(); return Number(j.count ?? j.value ?? 0)||0}catch(e){return 0}
+}
+async function loadPublicStats(){
+ let visitors=0;
+ try{
+   const key="viana_attendance_visit_day";
+   const today=new Date().toISOString().slice(0,10);
+   if(localStorage.getItem(key)!==today){visitors=await counterUp(COUNTERS.visits);localStorage.setItem(key,today)}
+   else visitors=await counterGet(COUNTERS.visits);
+ }catch(e){visitors=await counterGet(COUNTERS.visits)}
+ document.getElementById("visitorCount").textContent=visitors.toLocaleString();document.getElementById("communityVisitorCount").textContent=visitors.toLocaleString();
+ const counts=await Promise.all([1,2,3,4,5].map(n=>counterGet(COUNTERS["r"+n])));
+ const total=counts.reduce((a,b)=>a+b,0),sum=counts.reduce((a,b,i)=>a+b*(i+1),0);
+ document.getElementById("ratingCount").textContent=`(${total.toLocaleString()})`;
+ document.getElementById("topRating").textContent=total?(sum/total).toFixed(1):"—";
+ document.getElementById("communityRatingCount").textContent=total.toLocaleString();
+ document.getElementById("communityRating").textContent=total?(sum/total).toFixed(1):"—";
+}
+let selectedRating=0;
+function openModal(id){document.getElementById(id).classList.add("open")}
+function closeModal(id){document.getElementById(id).classList.remove("open")}
+function chooseRating(n){
+ selectedRating=n;
+ document.querySelectorAll(".rating-btn").forEach(b=>b.classList.toggle("selected",Number(b.dataset.rating)<=n));
+}
+async function submitRating(){
+ const status=document.getElementById("ratingStatus");
+ if(!selectedRating){status.textContent="Please select a rating.";return}
+ const key="viana_attendance_rated";
+ if(localStorage.getItem(key)){status.textContent="You have already rated this calculator on this browser.";return}
+ const newCount=await counterUp(COUNTERS["r"+selectedRating]);
+ localStorage.setItem(key,"1");
+ status.textContent="Thank you for your rating!";
+ await loadPublicStats();
+}
+async function submitFeedback(){
+ const text=document.getElementById("feedbackText").value.trim(), subject=document.getElementById("feedbackSubject").value.trim();
+ const status=document.getElementById("feedbackStatus");
+ if(text.length<5){status.textContent="Please enter a little more detail.";return}
+ if(!FEEDBACK_ENDPOINT){
+   status.textContent="The feedback form is ready, but its public submission endpoint has not been connected yet.";
+   return;
+ }
+ status.textContent="Sending...";
+ try{
+   const r=await fetch(FEEDBACK_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},
+     body:JSON.stringify({subject:subject||"Attendance Calculator Feedback",message:text})});
+   if(!r.ok) throw new Error();
+   status.textContent="Thank you! Your feedback was submitted.";
+   document.getElementById("feedbackText").value="";
+   document.getElementById("feedbackSubject").value="";
+ }catch(e){status.textContent="Could not send feedback right now. Please try again later."}
+}
+loadPublicStats();
+
+</script>
+</body>
+</html>
