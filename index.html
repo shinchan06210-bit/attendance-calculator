@@ -431,6 +431,8 @@ initializeTheme();initializeToday();renderHolidays();calculate();loadSavedAttend
 
 /* =========================================================
    SUPABASE: Ratings + Visitors + Feedback
+   Uses RPC functions so the public site does not need
+   direct table access.
    ========================================================= */
 const SUPABASE_URL="https://nobpfnmgguiqmwewlbpd.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_m_Kp48WeQQXDDnogVKhOWA_G_8wN_DR";
@@ -461,86 +463,62 @@ function supabaseHeaders(extra={}){
   };
 }
 
-async function statGet(statKey){
-  if(!supabaseReady()) return 0;
+async function rpc(name, body={}){
+  if(!supabaseReady()) throw new Error("Supabase publishable key is missing.");
 
-  try{
-    const response=await fetch(
-      `${SUPABASE_REST}/site_stats?stat_key=eq.${encodeURIComponent(statKey)}&select=stat_count`,
-      {headers:supabaseHeaders()}
-    );
+  const response=await fetch(`${SUPABASE_REST}/rpc/${name}`,{
+    method:"POST",
+    headers:supabaseHeaders({"Content-Type":"application/json"}),
+    body:JSON.stringify(body)
+  });
 
-    if(!response.ok) throw new Error(`Stats read failed: ${response.status}`);
-
-    const rows=await response.json();
-    return Number(rows[0]?.stat_count || 0);
-  }catch(error){
-    console.warn("Could not read statistic:", statKey, error);
-    return 0;
+  if(!response.ok){
+    const text=await response.text();
+    throw new Error(`${name} failed (${response.status}): ${text}`);
   }
+
+  return response.json();
 }
 
-async function statUp(statKey){
-  if(!supabaseReady()) return 0;
+async function getStats(){
+  const result=await rpc("get_site_stats");
+  const row=Array.isArray(result) ? (result[0]||{}) : (result||{});
 
-  try{
-    const response=await fetch(
-      `${SUPABASE_REST}/rpc/increment_stat`,
-      {
-        method:"POST",
-        headers:supabaseHeaders({
-          "Content-Type":"application/json",
-          "Prefer":"return=representation"
-        }),
-        body:JSON.stringify({p_key:statKey})
-      }
-    );
-
-    if(!response.ok) throw new Error(`Stats update failed: ${response.status}`);
-
-    const result=await response.json();
-
-    if(Array.isArray(result)){
-      return Number(result[0]?.count || 0);
-    }
-
-    return Number(result?.count || 0);
-  }catch(error){
-    console.warn("Could not update statistic:", statKey, error);
-    return 0;
-  }
+  return {
+    visitors:Number(row.visitors||0),
+    r1:Number(row.rating_1||0),
+    r2:Number(row.rating_2||0),
+    r3:Number(row.rating_3||0),
+    r4:Number(row.rating_4||0),
+    r5:Number(row.rating_5||0)
+  };
 }
 
-async function loadPublicStats(){
-  let visitors=await statGet(STAT_KEYS.visits);
+async function incrementStat(statKey){
+  const result=await rpc("increment_stat",{p_key:statKey});
+  const row=Array.isArray(result) ? (result[0]||{}) : (result||{});
+  return Number(row.count||0);
+}
 
-  /* Count one visit per browser per calendar day. */
-  const visitKey="viana_attendance_visit_day";
-  const today=new Date().toISOString().slice(0,10);
-
-  if(localStorage.getItem(visitKey)!==today){
-    const newVisitors=await statUp(STAT_KEYS.visits);
-    if(newVisitors>0) visitors=newVisitors;
-    localStorage.setItem(visitKey,today);
-  }
-
+function updatePublicStats(stats){
   const visitorElements=[
     document.getElementById("visitorCount"),
     document.getElementById("communityVisitorCount")
   ];
 
   visitorElements.forEach(el=>{
-    if(el) el.textContent=Number(visitors||0).toLocaleString();
+    if(el) el.textContent=Number(stats.visitors||0).toLocaleString();
   });
 
-  const ratingCounts=await Promise.all(
-    [1,2,3,4,5].map(n=>statGet(STAT_KEYS[`r${n}`]))
-  );
+  const ratingCounts=[
+    stats.r1,stats.r2,stats.r3,stats.r4,stats.r5
+  ];
 
   const ratingTotal=ratingCounts.reduce((a,b)=>a+b,0);
   const ratingSum=ratingCounts.reduce(
     (sum,count,index)=>sum + count*(index+1),0
   );
+
   const average=ratingTotal ? (ratingSum/ratingTotal).toFixed(1) : "—";
 
   const ratingCountEl=document.getElementById("ratingCount");
@@ -552,6 +530,29 @@ async function loadPublicStats(){
   if(topRatingEl) topRatingEl.textContent=average;
   if(communityRatingCountEl) communityRatingCountEl.textContent=ratingTotal.toLocaleString();
   if(communityRatingEl) communityRatingEl.textContent=average;
+}
+
+async function loadPublicStats(){
+  if(!supabaseReady()){
+    console.warn("Supabase publishable key has not been added yet.");
+    return;
+  }
+
+  try{
+    const visitKey="viana_attendance_visit_day";
+    const today=new Date().toLocaleDateString("en-CA");
+
+    /* Count one visit per browser per calendar day. */
+    if(localStorage.getItem(visitKey)!==today){
+      await incrementStat(STAT_KEYS.visits);
+      localStorage.setItem(visitKey,today);
+    }
+
+    const stats=await getStats();
+    updatePublicStats(stats);
+  }catch(error){
+    console.error("Could not load public statistics:",error);
+  }
 }
 
 /* =========================================================
@@ -600,18 +601,20 @@ async function submitRating(){
     return;
   }
 
-  const newCount=await statUp(STAT_KEYS[`r${selectedRating}`]);
+  if(status) status.textContent="Saving your rating...";
 
-  if(newCount<=0){
+  try{
+    await incrementStat(STAT_KEYS[`r${selectedRating}`]);
+    localStorage.setItem(ratingKey,"1");
+
+    if(status) status.textContent="Thank you for your rating! ⭐";
+
+    const stats=await getStats();
+    updatePublicStats(stats);
+  }catch(error){
+    console.error("Rating submission error:",error);
     if(status) status.textContent="Could not save the rating. Please try again.";
-    return;
   }
-
-  localStorage.setItem(ratingKey,"1");
-
-  if(status) status.textContent="Thank you for your rating! ⭐";
-
-  await loadPublicStats();
 }
 
 /* =========================================================
@@ -643,25 +646,10 @@ async function submitFeedback(){
   if(status) status.textContent="Sending...";
 
   try{
-    const response=await fetch(
-      `${SUPABASE_REST}/feedback`,
-      {
-        method:"POST",
-        headers:supabaseHeaders({
-          "Content-Type":"application/json",
-          "Prefer":"return=minimal"
-        }),
-        body:JSON.stringify({
-          subject:subject || "Attendance Calculator Feedback",
-          message:message
-        })
-      }
-    );
-
-    if(!response.ok){
-      const errorText=await response.text();
-      throw new Error(errorText || `Feedback failed: ${response.status}`);
-    }
+    await rpc("submit_feedback",{
+      p_subject:subject || "Attendance Calculator Feedback",
+      p_message:message
+    });
 
     if(textEl) textEl.value="";
     if(subjectEl) subjectEl.value="";
@@ -674,10 +662,7 @@ async function submitFeedback(){
 }
 
 /* Load shared public statistics without blocking the calculator. */
-loadPublicStats().catch(error=>{
-  console.warn("Public statistics could not be loaded:",error);
-});
-
+loadPublicStats();
 </script>
 </body>
 </html>
