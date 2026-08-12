@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Replace the placeholder URL with your real published website URL. -->
   <url>
-    <loc>https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/</loc>
+    <loc>https://attendance-calculator-simats.netlify.app/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
