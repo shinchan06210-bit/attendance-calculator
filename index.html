@@ -18,7 +18,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"SIMATS ENGINEERING Viana Portal Attendance Calculator","applicationCategory":"EducationalApplication","operatingSystem":"Web","description":"Free educational attendance planning calculator for slot-based college timetables.","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}
 </script>
-<link rel="icon" type="image/png" href="logo.png">
+
 <title>SIMATS ENGINEERING Viana Portal Attendance Calculator | Free Attendance Planner</title>
 <style>
 :root{
@@ -599,7 +599,7 @@ Include the entered “Calculate up to / Today” date in the attendance period
 <p class="note">Regular classes are scheduled from <b>06 Jul 2026 to 03 Sep 2026 <i>(Tentatively)</i></b>. Sundays are excluded. Added holidays exclude attendance count only and do <b>not</b> shift the timetable rotation.</p>
 </div>
 
-<!--<div class="card">
+<div class="card">
 <h2>Optional Class / Course Names</h2>
 <p class="note">Leave these blank if you only want to see Slot A/B/C/D. If you enter a name, the result will show for example <b>Slot A – CSA1001</b>.</p>
 <div class="subjects">
@@ -608,9 +608,18 @@ Include the entered “Calculate up to / Today” date in the attendance period
 <div class="subject"><b>Slot C</b><input id="nameC" placeholder="Optional name"></div>
 <div class="subject"><b>Slot D</b><input id="nameD" placeholder="Optional name"></div>
 </div>
-</div>-->
+</div>
 
-
+<div class="card">
+<h2>Add Holidays Which is Upcoming</h2>
+<p class="note">Use this only when a date is a holiday and its attendance should not be counted. The timetable row remains visible and the rotation is <b>not shifted</b>.</p>
+<div class="grid3">
+<div><label>Holiday Date</label><input id="holidayDate" type="date"></div>
+<div><label>Reason (optional)</label><input id="holidayReason" placeholder="College holiday"></div>
+<div style="align-self:end"><button class="primary" onclick="addHoliday()">Add Holiday</button></div>
+</div>
+<div id="holidayList" class="note" style="margin-top:12px"></div>
+</div>
 
 <div class="card" id="attendanceInputCard">
 <h2>Enter / Update Actual Attendance Till Now</h2>
@@ -643,17 +652,7 @@ Include the entered “Calculate up to / Today” date in the attendance period
 <div class="card"><h2>Fixed Timetable — Remaining Dates</h2>
 <p class="note">Rotation is fixed and continuous: <b>A-B → C-D → B-A → D-C → A-B → C-D</b>. Sundays are skipped for scheduling. Added holidays remain in the timetable but their attendance count is excluded.</p>
 <div class="table-wrap"><table><thead><tr><th>Date</th><th>Day</th><th>Morning (08:00 AM – 12:00 PM)</th><th>Afternoon (01:00 PM – 03:00 PM)</th><th>Status</th></tr></thead><tbody id="schedule"></tbody></table></div></div>
-<div class="card">
-<h2>Add Holidays Which is Upcoming</h2>
-<p class="note">Use this only when a date is a holiday and its attendance should not be counted. The timetable row remains visible and the rotation is <b>not shifted</b>.</p>
-<div class="grid3">
-<div><label>Holiday Date</label><input id="holidayDate" type="date"></div>
-<div><label>Reason (optional)</label><input id="holidayReason" placeholder="College holiday"></div>
-<div style="align-self:end"><button class="primary" onclick="addHoliday()">Add Holiday</button></div>
-</div>
-<div id="holidayList" class="note" style="margin-top:12px"></div>
-</div>
-  
+
 <div class="card">
 <h2>Exam Attendance — From 04 Sep 2026</h2>
 <div class="help">There may be about <b>12 examination days</b> (3 days per slot: Model Exam, Capstone/Practical, University Exam). These are not automatically added because exam attendance is rare/uncertain. If your faculty actually records attendance, enter the <b>Extra Attendance Marked Count</b> here and click <b>Add Counts</b>.</div><br>
