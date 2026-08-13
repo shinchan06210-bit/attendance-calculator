@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Viana Portal – Attendance Calculator</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7ff, #eef4ff);
+      color: #172033;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .maintenance-card {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 45px 30px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+    }
+
+    .icon {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 22px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.25);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #f97316;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.35;
+      }
+    }
+
+    .info {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 15px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .brand {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .brand strong {
+      color: #475569;
+    }
+
+    @media (max-width: 480px) {
+      .maintenance-card {
+        padding: 35px 20px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .icon {
+        width: 68px;
+        height: 68px;
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="maintenance-card">
+
+    <div class="icon">🔧</div>
+
+    <div class="status">
+      <span class="dot"></span>
+      Under Maintenance
+    </div>
+
+    <h1>Viana Portal Attendance Calculator</h1>
+
+    <p class="subtitle">
+      We are currently making some improvements to the
+      Attendance Calculator.
+    </p>
+
+    <div class="info">
+      The website will be available again shortly.
+      Please check back later.
+      <br><br>
+      Thank you for your patience.
+    </div>
+
+    <div class="brand">
+      <strong>Viana Portal</strong> · Attendance Calculator
+      <br>
+      For educational purposes only
+    </div>
+
+  </main>
+
+</body>
+</html>
