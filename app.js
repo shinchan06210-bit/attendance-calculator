@@ -47,8 +47,8 @@ const ATTENDANCE_WINDOWS = [
 
     {
         session: 1,
-        start: "02:00",
-        end: "02:45"
+        start: "08:00",
+        end: "08:14"
     },
 
     {
