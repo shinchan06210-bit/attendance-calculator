@@ -1,167 +1,1013 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>New Attendance Calculator</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <title>Attendance Calculator - MS2 Sep-Dec 2026</title>
 
-    body {
-      min-height: 100vh;
-      font-family: Inter, Arial, sans-serif;
-      background: linear-gradient(135deg, #f5f7ff, #eef4ff);
-      color: #172033;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .maintenance-card {
-      width: 100%;
-      max-width: 520px;
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid #e2e8f0;
-      border-radius: 24px;
-      padding: 45px 30px;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
-    }
-
-    .icon {
-      width: 76px;
-      height: 76px;
-      margin: 0 auto 22px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #2563eb, #4f46e5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.25);
-    }
-
-    h1 {
-      font-size: 28px;
-      margin-bottom: 12px;
-      letter-spacing: -0.5px;
-    }
-
-    .subtitle {
-      color: #64748b;
-      font-size: 15px;
-      line-height: 1.7;
-      margin-bottom: 25px;
-    }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #fff7ed;
-      color: #c2410c;
-      border: 1px solid #fed7aa;
-      padding: 9px 15px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 25px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      background: #f97316;
-      border-radius: 50%;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.35;
-      }
-    }
-
-    .info {
-      background: #f8fafc;
-      border-radius: 14px;
-      padding: 15px;
-      color: #64748b;
-      font-size: 13px;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
-
-    .brand {
-      font-size: 13px;
-      color: #94a3b8;
-    }
-
-    .brand strong {
-      color: #475569;
-    }
-
-    @media (max-width: 480px) {
-      .maintenance-card {
-        padding: 35px 20px;
-        border-radius: 20px;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      .icon {
-        width: 68px;
-        height: 68px;
-        font-size: 32px;
-      }
-    }
-  </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <main class="maintenance-card">
+<div class="app-container">
 
-    <div class="icon">🛠️</div>
+    <!-- HEADER -->
+    <header class="top-header">
 
-    <div class="status">
-      <span class="dot"></span>
-      Under Maintenance
+        <div class="brand-section">
+
+            <div class="brand-icon">
+                📊
+            </div>
+
+            <div>
+                <h1>Attendance Calculator</h1>
+                <p>MS2 Sep-Dec 2026 (UG)</p>
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <div class="eligibility-badge">
+
+                <span>Eligibility</span>
+
+                <strong id="headerEligibility">
+                    80%
+                </strong>
+
+            </div>
+
+
+            <button
+                class="settings-btn"
+                onclick="openSettings()"
+            >
+                ⚙️ Settings
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- CURRENT DATE/TIME -->
+    <section class="current-time-card">
+
+        <div>
+
+            <span class="small-label">
+                Today
+            </span>
+
+            <h2 id="currentDate">
+                Loading...
+            </h2>
+
+        </div>
+
+
+        <div class="live-time">
+
+            <span class="small-label">
+                Current Time
+            </span>
+
+            <strong id="currentTime">
+                --:--:--
+            </strong>
+
+        </div>
+        
+
+    </section>
+    <section class="current-time-card">
+      <div>
+            <button
+                class="settings-btn"
+                onclick="openSettings()"
+            >
+                ⚙️ Click Me To Update Your Course Code & Name
+            </button>
+
+            
+
+        </div>
+    </section>
+
+
+    <!-- TODAY'S CLASSES -->
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Today's Classes</h2>
+
+                <p>
+                    Today's fixed timetable
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="todaySchedule"
+            class="today-schedule"
+        >
+        </div>
+
+    </section>
+
+
+    <!-- ACTIVE ATTENDANCE -->
+    <section
+        id="activeWindowSection"
+        class="active-window-section hidden"
+    >
+
+        <div class="active-window-card">
+
+            <div class="active-icon">
+                📝
+            </div>
+
+
+            <div class="active-info">
+
+                <span class="active-label">
+                    Attendance Window Open
+                </span>
+
+                <h3 id="activeSubjectName">
+                    Loading...
+                </h3>
+
+                <p id="activeWindowTime">
+                    08:00 AM – 08:15 AM
+                </p>
+
+            </div>
+
+
+            <button
+                class="check-attendance-btn"
+                onclick="openAttendanceModal()"
+            >
+                Check Attendance
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- SLOT ATTENDANCE -->
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Slot Wise Attendance Report</h2>
+
+                <p>
+                    Attendance status for each subject
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="slotGrid"
+            class="slot-grid"
+        >
+        </div>
+
+    </section>
+
+
+    <!-- MANUAL ATTENDANCE -->
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Manual Attendance</h2>
+
+                <p>
+                    Enter attendance records from before using this calculator.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="manual-main-card">
+
+            <div class="manual-main-header">
+
+                <span>Slot</span>
+
+                <span>Absent</span>
+
+                <span>Faculty Missed</span>
+
+            </div>
+
+
+            <!-- SLOT A -->
+
+            <div class="manual-main-row">
+
+                <div class="manual-slot-name slot-a-text">
+                    SLOT A
+                </div>
+
+                <input
+                    type="number"
+                    id="mainManualAbsentA"
+                    min="0"
+                    value="0"
+                >
+
+                <input
+                    type="number"
+                    id="mainManualFacultyA"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <!-- SLOT B -->
+
+            <div class="manual-main-row">
+
+                <div class="manual-slot-name slot-b-text">
+                    SLOT B
+                </div>
+
+                <input
+                    type="number"
+                    id="mainManualAbsentB"
+                    min="0"
+                    value="0"
+                >
+
+                <input
+                    type="number"
+                    id="mainManualFacultyB"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <!-- SLOT C -->
+
+            <div class="manual-main-row">
+
+                <div class="manual-slot-name slot-c-text">
+                    SLOT C
+                </div>
+
+                <input
+                    type="number"
+                    id="mainManualAbsentC"
+                    min="0"
+                    value="0"
+                >
+
+                <input
+                    type="number"
+                    id="mainManualFacultyC"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <!-- SLOT D -->
+
+            <div class="manual-main-row">
+
+                <div class="manual-slot-name slot-d-text">
+                    SLOT D
+                </div>
+
+                <input
+                    type="number"
+                    id="mainManualAbsentD"
+                    min="0"
+                    value="0"
+                >
+
+                <input
+                    type="number"
+                    id="mainManualFacultyD"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="manual-save-area">
+
+                <button
+                    class="save-manual-btn"
+                    onclick="saveManualAttendance()"
+                >
+                    💾 Save Manual Attendance
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TODAY RECORDS -->
+    <section class="section">
+
+        <div class="section-heading records-heading">
+
+            <div>
+
+                <h2>
+                    Today's Attendance Records
+                </h2>
+
+                <p>
+                    Attendance marked today
+                </p>
+
+            </div>
+
+
+            <button
+                class="danger-outline-btn"
+                onclick="clearTodayRecords()"
+            >
+                Clear Today's Records
+            </button>
+
+        </div>
+
+
+        <div
+            id="todayRecords"
+            class="records-container"
+        >
+        </div>
+
+    </section>
+
+
+    <!-- FIXED TIMETABLE -->
+    <section class="section timetable-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    📅 My Timetable
+                </h2>
+
+                <p>
+                    Overall fixed schedule
+                </p>
+
+            </div>
+
+
+            <div class="view-switch">
+
+                <button
+                    id="weekViewBtn"
+                    onclick="setTimetableView('week')"
+                >
+                    Week
+                </button>
+
+
+                <button
+                    id="monthViewBtn"
+                    class="active"
+                    onclick="setTimetableView('month')"
+                >
+                    Month
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="calendar-toolbar">
+
+            <button
+                onclick="changeMonth(-1)"
+                class="calendar-arrow"
+            >
+                ‹
+            </button>
+
+
+            <h2 id="calendarTitle">
+                October 2026
+            </h2>
+
+
+            <button
+                onclick="changeMonth(1)"
+                class="calendar-arrow"
+            >
+                ›
+            </button>
+
+
+            <button
+                onclick="goToToday()"
+                class="today-btn"
+            >
+                Today
+            </button>
+
+
+            <button
+                onclick="refreshSchedule()"
+                class="refresh-btn"
+            >
+                ↻
+            </button>
+
+        </div>
+
+
+        <div
+            id="calendarContainer"
+            class="calendar-container"
+        >
+        </div>
+
+    </section>
+
+
+    <!-- RULES -->
+    <section class="section rules-section">
+
+        <h2>
+            Attendance Rules
+        </h2>
+
+
+        <div class="rules-grid">
+
+            <div class="rule-card">
+
+                <span>🌅</span>
+
+                <div>
+
+                    <strong>
+                        Session 1
+                    </strong>
+
+                    <p>
+                        08:00–08:15 |
+                        09:30–09:45
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="rule-card">
+
+                <span>☀️</span>
+
+                <div>
+
+                    <strong>
+                        Session 2
+                    </strong>
+
+                    <p>
+                        12:00–12:15 |
+                        01:30–01:45
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="rule-card">
+
+                <span>📌</span>
+
+                <div>
+
+                    <strong>
+                        Each marking
+                    </strong>
+
+                    <p>
+                        1 attendance count
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="rule-card">
+
+                <span>⚠️</span>
+
+                <div>
+
+                    <strong>
+                        Faculty Missed
+                    </strong>
+
+                    <p>
+                        Not added to attendance
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =====================================================
+     ATTENDANCE MODAL
+===================================================== -->
+
+<div
+    id="attendanceModal"
+    class="modal hidden"
+>
+
+    <div class="modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeAttendanceModal()"
+        >
+            ×
+        </button>
+
+
+        <div class="modal-icon">
+            📝
+        </div>
+
+
+        <h2>
+            Was your attendance marked?
+        </h2>
+
+
+        <p id="modalSubjectText">
+            Attendance for this window
+        </p>
+
+
+        <div class="attendance-options">
+
+            <button
+                class="attendance-option present-option"
+                onclick="submitAttendance('present')"
+            >
+
+                <span>✓</span>
+
+                <div>
+
+                    <strong>
+                        Yes, Marked
+                    </strong>
+
+                    <small>
+                        Attendance was recorded
+                    </small>
+
+                </div>
+
+            </button>
+
+
+            <button
+                class="attendance-option absent-option"
+                onclick="submitAttendance('absent')"
+            >
+
+                <span>×</span>
+
+                <div>
+
+                    <strong>
+                        No, Not Marked
+                    </strong>
+
+                    <small>
+                        Count this as absent
+                    </small>
+
+                </div>
+
+            </button>
+
+
+            <button
+                class="attendance-option missed-option"
+                onclick="submitAttendance('faculty_missed')"
+            >
+
+                <span>⚠</span>
+
+                <div>
+
+                    <strong>
+                        Faculty Missed
+                    </strong>
+
+                    <small>
+                        No attendance count added
+                    </small>
+
+                </div>
+
+            </button>
+
+        </div>
+
     </div>
 
-    <h1>New Attendance Calculator will be Available Soon!</h1>
+</div>
 
-    <p class="subtitle">
-      We are currently making some improvements to the
-      Attendance Calculator.
-    </p>
 
-    <div class="info">
-      The website will be available again shortly.
-      Please check back later.
-      <br><br>
-      Thank you for your patience.
+<!-- =====================================================
+     SETTINGS MODAL
+===================================================== -->
+
+<div
+    id="settingsModal"
+    class="modal hidden"
+>
+
+    <div class="modal-box settings-modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeSettings()"
+        >
+            ×
+        </button>
+
+
+        <div class="modal-icon">
+            ⚙️
+        </div>
+
+
+        <h2>
+            Settings
+        </h2>
+
+
+        <p class="modal-description">
+            Change eligibility and slot course information here.
+        </p>
+
+
+        <!-- ELIGIBILITY -->
+
+        <div class="settings-section">
+
+            <h3>
+                Eligibility Percentage
+            </h3>
+
+            <label>
+                Minimum required attendance
+            </label>
+
+
+            <div class="percentage-input">
+
+                <input
+                    type="number"
+                    id="eligibilityInput"
+                    min="1"
+                    max="100"
+                    step="0.1"
+                >
+
+                <span>%</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- COURSE INFORMATION -->
+
+        <div class="settings-section">
+
+            <h3>
+                Slot Course Details
+            </h3>
+
+            <p class="settings-help">
+                💡 Change the Course Code and Course Name for each slot here.
+                These names will automatically appear throughout the dashboard
+                and timetable.
+            </p>
+
+
+            <!-- A -->
+
+            <div class="slot-setting-card">
+
+                <div class="slot-setting-title slot-a-title">
+                    SLOT A
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <label>
+                            Course Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="codeA"
+                            placeholder="CSA3711"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Course Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nameA"
+                            placeholder="Course Name"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- B -->
+
+            <div class="slot-setting-card">
+
+                <div class="slot-setting-title slot-b-title">
+                    SLOT B
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <label>
+                            Course Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="codeB"
+                            placeholder="ITA0510"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Course Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nameB"
+                            placeholder="Course Name"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- C -->
+
+            <div class="slot-setting-card">
+
+                <div class="slot-setting-title slot-c-title">
+                    SLOT C
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <label>
+                            Course Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="codeC"
+                            placeholder="UBA2801"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Course Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nameC"
+                            placeholder="Course Name"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- D -->
+
+            <div class="slot-setting-card">
+
+                <div class="slot-setting-title slot-d-title">
+                    SLOT D
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <label>
+                            Course Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="codeD"
+                            placeholder="ITA0312"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Course Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nameD"
+                            placeholder="Course Name"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ATTENDANCE WINDOWS -->
+
+        <div class="settings-section">
+
+            <h3>
+                Attendance Windows
+            </h3>
+
+
+            <div class="window-list">
+
+                <div>
+
+                    <strong>
+                        Session 1
+                    </strong>
+
+                    <span>
+                        08:00–08:15
+                    </span>
+
+                    <span>
+                        09:30–09:45
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Session 2
+                    </strong>
+
+                    <span>
+                        12:00–12:15
+                    </span>
+
+                    <span>
+                        13:30–13:45
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="settings-actions">
+
+            <button
+                class="secondary-btn"
+                onclick="resetSettings()"
+            >
+                Reset
+            </button>
+
+
+            <button
+                class="primary-btn"
+                onclick="saveSettings()"
+            >
+                Save Settings
+            </button>
+
+        </div>
+
     </div>
 
-    <div class="brand">
-      <strong>New Attendance Calculator
-      <br>
-      For educational purposes only
-    </div>
+</div>
 
-  </main>
+
+<script src="app.js"></script>
 
 </body>
 </html>
