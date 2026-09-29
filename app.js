@@ -1861,19 +1861,16 @@ function updateEverything() {
 
 function updateClockAndActiveWindow() {
 
-    const now =
-        new Date();
+    const now = new Date();
 
+
+    /* =====================================================
+       CURRENT DATE
+    ===================================================== */
 
     const currentDateElement =
         document.getElementById(
             "currentDate"
-        );
-
-
-    const currentTimeElement =
-        document.getElementById(
-            "currentTime"
         );
 
 
@@ -1882,28 +1879,26 @@ function updateClockAndActiveWindow() {
         currentDateElement.textContent =
 
             now.toLocaleDateString(
-
                 "en-IN",
-
                 {
-
-                    weekday:
-                        "long",
-
-                    day:
-                        "numeric",
-
-                    month:
-                        "long",
-
-                    year:
-                        "numeric"
-
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
                 }
-
             );
 
     }
+
+
+    /* =====================================================
+       CURRENT TIME
+    ===================================================== */
+
+    const currentTimeElement =
+        document.getElementById(
+            "currentTime"
+        );
 
 
     if (currentTimeElement) {
@@ -1911,28 +1906,24 @@ function updateClockAndActiveWindow() {
         currentTimeElement.textContent =
 
             now.toLocaleTimeString(
-
                 "en-IN",
-
                 {
-
-                    hour:
-                        "2-digit",
-
-                    minute:
-                        "2-digit",
-
-                    second:
-                        "2-digit",
-
-                    hour12:
-                        true
-
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true
                 }
-
             );
 
     }
+
+
+    /* =====================================================
+       FIND ACTIVE WINDOW
+    ===================================================== */
+
+    const previousWindow =
+        activeAttendanceWindow;
 
 
     const active =
@@ -1956,16 +1947,38 @@ function updateClockAndActiveWindow() {
     }
 
 
+    /* =====================================================
+       NO ACTIVE WINDOW
+    ===================================================== */
+
     if (!active) {
 
         section.classList.add(
             "hidden"
         );
 
+        /*
+           Important:
+           When a window closes, refresh the
+           slot attendance immediately.
+        */
+
+        if (previousWindow) {
+
+            renderSlotCards();
+
+            renderTodayRecords();
+
+        }
+
         return;
 
     }
 
+
+    /* =====================================================
+       ACTIVE WINDOW
+    ===================================================== */
 
     section.classList.remove(
         "hidden"
@@ -2018,7 +2031,6 @@ function updateClockAndActiveWindow() {
     }
 
 }
-
 
 /* =========================================================
    HEADER ELIGIBILITY
