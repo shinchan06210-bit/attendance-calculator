@@ -2002,3 +2002,1036 @@ button {
     }
 
 }
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   MOBILE + TABLET + LAPTOP + DESKTOP
+========================================================= */
+
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+
+body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+
+.app-container {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   1200px+
+========================================================= */
+
+@media (min-width: 1200px) {
+
+    .app-container {
+        padding: 24px 30px;
+    }
+
+
+    .slot-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+    }
+
+
+    .today-schedule {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   LAPTOP / SMALL DESKTOP
+   769px - 1199px
+========================================================= */
+
+@media (min-width: 769px)
+       and
+       (max-width: 1199px) {
+
+    .app-container {
+        padding: 18px;
+    }
+
+
+    .slot-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .today-schedule {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .top-header {
+        gap: 15px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   601px - 768px
+========================================================= */
+
+@media (min-width: 601px)
+       and
+       (max-width: 768px) {
+
+    .app-container {
+        padding: 15px;
+    }
+
+
+    /* HEADER */
+
+    .top-header {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 14px;
+    }
+
+
+    .header-actions {
+        justify-content: space-between;
+    }
+
+
+    /* SLOT CARDS */
+
+    .slot-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 14px;
+    }
+
+
+    /* TODAY SCHEDULE */
+
+    .today-schedule {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    /* CURRENT TIME */
+
+    .current-time-card {
+        flex-direction: row;
+    }
+
+
+    /* MANUAL ATTENDANCE */
+
+    .manual-main-header,
+    .manual-main-row {
+
+        grid-template-columns:
+            1fr 1fr 1.2fr;
+
+    }
+
+
+    /* SETTINGS */
+
+    .settings-modal-box {
+        width: min(
+            94vw,
+            650px
+        );
+    }
+
+
+    .setting-row {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    /* CALENDAR */
+
+    .calendar-event {
+        font-size: 10px;
+    }
+
+
+    .event-time {
+        font-size: 9px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   0px - 600px
+========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        font-size: 14px;
+    }
+
+
+    .app-container {
+        padding: 10px;
+    }
+
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .top-header {
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 12px;
+
+        padding: 14px;
+
+        border-radius: 15px;
+
+    }
+
+
+    .brand-section {
+
+        width: 100%;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+    }
+
+
+    .brand-section h1 {
+
+        font-size: 19px;
+
+        line-height: 1.2;
+
+    }
+
+
+    .brand-section p {
+
+        font-size: 11px;
+
+    }
+
+
+    .brand-icon {
+
+        width: 40px;
+
+        height: 40px;
+
+        flex-shrink: 0;
+
+    }
+
+
+    .header-actions {
+
+        width: 100%;
+
+        display: flex;
+
+        justify-content:
+            space-between;
+
+        gap: 8px;
+
+    }
+
+
+    .eligibility-badge {
+
+        flex: 1;
+
+    }
+
+
+    .settings-btn {
+
+        flex: 1;
+
+    }
+
+
+    /* =====================================================
+       SECTION HEADINGS
+    ===================================================== */
+
+    .section-heading {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 8px;
+
+    }
+
+
+    .section-heading h2 {
+
+        font-size: 19px;
+
+    }
+
+
+    .section-heading p {
+
+        font-size: 12px;
+
+    }
+
+
+    /* =====================================================
+       CURRENT DATE / TIME
+    ===================================================== */
+
+    .current-time-card {
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 12px;
+
+        padding: 15px;
+
+    }
+
+
+    .current-time-card h2 {
+
+        font-size: 18px;
+
+    }
+
+
+    .live-time {
+
+        padding-top: 10px;
+
+        border-top:
+            1px solid #e5e7eb;
+
+    }
+
+
+    /* =====================================================
+       TODAY'S CLASSES
+    ===================================================== */
+
+    .today-schedule {
+
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+
+    }
+
+
+    .today-class-card {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
+
+
+    .class-code {
+
+        font-size: 14px;
+
+    }
+
+
+    .class-name {
+
+        font-size: 11px;
+
+    }
+
+
+    .class-time {
+
+        font-size: 10px;
+
+    }
+
+
+    /* =====================================================
+       ACTIVE ATTENDANCE
+    ===================================================== */
+
+    .active-window-card {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        text-align: left;
+
+        gap: 12px;
+
+    }
+
+
+    .check-attendance-btn {
+
+        width: 100%;
+
+    }
+
+
+    /* =====================================================
+       SLOT RESULTS
+    ===================================================== */
+
+    .slot-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+    }
+
+
+    .slot-card {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
+
+
+    .circular-progress {
+
+        width: 105px;
+
+        height: 105px;
+
+        margin: 15px auto;
+
+    }
+
+
+    .slot-course-code {
+
+        font-size: 15px;
+
+    }
+
+
+    .slot-course-name {
+
+        font-size: 11px;
+
+    }
+
+
+    .slot-stats {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 6px;
+
+    }
+
+
+    .stat-box {
+
+        padding: 9px 5px;
+
+    }
+
+
+    .stat-box span {
+
+        font-size: 9px;
+
+    }
+
+
+    .stat-box strong {
+
+        font-size: 16px;
+
+    }
+
+
+    .slot-total-box {
+
+        padding: 10px;
+
+    }
+
+
+    .slot-result {
+
+        font-size: 11px;
+
+        line-height: 1.5;
+
+    }
+
+
+    /* =====================================================
+       MANUAL ATTENDANCE
+    ===================================================== */
+
+    .manual-main-card {
+
+        overflow-x: hidden;
+
+    }
+
+
+    .manual-main-header {
+
+        display: grid;
+
+        grid-template-columns:
+            0.8fr 1fr 1.2fr;
+
+        gap: 6px;
+
+        padding: 11px 8px;
+
+        font-size: 9px;
+
+    }
+
+
+    .manual-main-row {
+
+        display: grid;
+
+        grid-template-columns:
+            0.8fr 1fr 1.2fr;
+
+        gap: 6px;
+
+        padding: 10px 8px;
+
+    }
+
+
+    .manual-slot-name {
+
+        font-size: 10px;
+
+    }
+
+
+    .manual-main-row input {
+
+        width: 100%;
+
+        min-width: 0;
+
+        padding: 9px 6px;
+
+        font-size: 12px;
+
+    }
+
+
+    .manual-save-area {
+
+        padding: 12px 8px;
+
+    }
+
+
+    .save-manual-btn {
+
+        width: 100%;
+
+    }
+
+
+    /* =====================================================
+       RECORDS
+    ===================================================== */
+
+    .records-heading {
+
+        align-items: stretch;
+
+    }
+
+
+    .danger-outline-btn {
+
+        width: 100%;
+
+    }
+
+
+    .record-row {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 5px;
+
+        padding: 12px;
+
+    }
+
+
+    .record-time {
+
+        font-size: 11px;
+
+    }
+
+
+    .record-subject {
+
+        font-size: 13px;
+
+    }
+
+
+    .record-window {
+
+        font-size: 10px;
+
+    }
+
+
+    .record-status {
+
+        width: fit-content;
+
+    }
+
+
+    /* =====================================================
+       TIMETABLE
+    ===================================================== */
+
+    .timetable-section {
+
+        overflow: hidden;
+
+    }
+
+
+    .view-switch {
+
+        width: 100%;
+
+    }
+
+
+    .view-switch button {
+
+        flex: 1;
+
+    }
+
+
+    .calendar-toolbar {
+
+        display: grid;
+
+        grid-template-columns:
+            40px 1fr 40px;
+
+        gap: 6px;
+
+        align-items: center;
+
+    }
+
+
+    .calendar-toolbar h2 {
+
+        text-align: center;
+
+        font-size: 15px;
+
+    }
+
+
+    .today-btn {
+
+        grid-column:
+            1 / -1;
+
+        width: 100%;
+
+    }
+
+
+    .refresh-btn {
+
+        grid-column:
+            1 / -1;
+
+        width: 100%;
+
+    }
+
+
+    /* =====================================================
+       MONTH CALENDAR
+    ===================================================== */
+
+    .calendar-container {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        -webkit-overflow-scrolling: touch;
+
+    }
+
+
+    .month-calendar {
+
+        min-width: 680px;
+
+    }
+
+
+    /*
+        We intentionally keep the monthly
+        calendar wider and allow horizontal
+        scrolling on small phones.
+
+        This prevents the timetable from
+        becoming unreadably tiny.
+    */
+
+
+    .calendar-event {
+
+        padding: 6px;
+
+        font-size: 9px;
+
+    }
+
+
+    .event-code {
+
+        font-size: 9px;
+
+    }
+
+
+    .event-slot {
+
+        font-size: 8px;
+
+    }
+
+
+    .event-time {
+
+        font-size: 8px;
+
+    }
+
+
+    /* =====================================================
+       WEEK CALENDAR
+    ===================================================== */
+
+    .week-calendar {
+
+        width: 100%;
+
+    }
+
+
+    .week-day-row {
+
+        grid-template-columns:
+            65px 1fr;
+
+    }
+
+
+    .week-day-name {
+
+        font-size: 10px;
+
+    }
+
+
+    .week-events {
+
+        gap: 6px;
+
+    }
+
+
+    /* =====================================================
+       RULES
+    ===================================================== */
+
+    .rules-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 8px;
+
+    }
+
+
+    .rule-card {
+
+        padding: 11px;
+
+    }
+
+
+    /* =====================================================
+       MODALS
+    ===================================================== */
+
+    .modal {
+
+        padding: 10px;
+
+        align-items:
+            flex-end;
+
+    }
+
+
+    .modal-box {
+
+        width: 100%;
+
+        max-width: none;
+
+        max-height: 90vh;
+
+        overflow-y: auto;
+
+        border-radius:
+            20px 20px 0 0;
+
+        padding: 20px 15px;
+
+    }
+
+
+    .settings-modal-box {
+
+        width: 100%;
+
+    }
+
+
+    .modal-box h2 {
+
+        font-size: 19px;
+
+    }
+
+
+    .attendance-options {
+
+        gap: 8px;
+
+    }
+
+
+    .attendance-option {
+
+        padding: 11px;
+
+    }
+
+
+    /* =====================================================
+       SETTINGS
+    ===================================================== */
+
+    .setting-row {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 10px;
+
+    }
+
+
+    .slot-setting-card {
+
+        padding: 12px;
+
+    }
+
+
+    .settings-actions {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 8px;
+
+    }
+
+
+    .settings-actions button {
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   320px - 380px
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .app-container {
+        padding: 7px;
+    }
+
+
+    .brand-section h1 {
+        font-size: 17px;
+    }
+
+
+    .header-actions {
+        flex-direction: column;
+    }
+
+
+    .eligibility-badge,
+    .settings-btn {
+        width: 100%;
+    }
+
+
+    .slot-stats {
+        gap: 4px;
+    }
+
+
+    .stat-box {
+        padding: 8px 3px;
+    }
+
+
+    .stat-box span {
+        font-size: 8px;
+    }
+
+
+    .stat-box strong {
+        font-size: 14px;
+    }
+
+
+    .manual-main-header,
+    .manual-main-row {
+        grid-template-columns:
+            0.7fr 1fr 1.1fr;
+    }
+
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    button,
+    input,
+    select {
+
+        min-height: 42px;
+
+    }
+
+
+    button {
+
+        -webkit-tap-highlight-color:
+            transparent;
+
+    }
+
+
+    input {
+
+        font-size: 16px;
+
+    }
+
+}
